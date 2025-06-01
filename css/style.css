@@ -15,12 +15,12 @@
     position: absolute;
     bottom: 0;
     width: 80px;
-    right: 0;
-    animation: pipe-animation 2s;
+    right: -80px;
+    animation: pipe-animation 2s infinite linear;
 }
 @keyframes pipe-animation{
     from{
-        right: 0px;
+        right: -80px;
     }
     to{
         right: 100%;
