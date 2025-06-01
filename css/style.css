@@ -30,7 +30,7 @@
 .clouds{
     width: 500px;
     position: absolute;
-    animation: clouds-animation 10s linear infinite;
+    animation: clouds-animation 20s linear infinite;
 }
 @keyframes pipe-animation{
     from{
@@ -59,7 +59,7 @@
 }
 @keyframes clouds-animation{
     from{
-        right: 0;
+        right: -550px;
     }
     to{
         right: 100%;
