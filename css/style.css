@@ -34,19 +34,37 @@
 }
 .scoreboard {
     width: 100%;
-    max-width: 800px;
+    max-width: 700px;
     margin: 0 auto;
-    padding: 15px 20px;
-    font-size: 1.5rem;
-    font-family: Arial, sans-serif;
-    color: #333;
-    background: rgba(255,255,255,0.7);
-    box-sizing: border-box;
+    padding: 14px 24px;
+    font-size: 1.1rem;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    color: #1a237e;
+    background: rgba(255,255,255,0.85);
+    border: 3px solid #e94f37;
+    border-radius: 14px;
+    box-shadow: 0 4px 0 #e94f37, 0 2px 12px #0002;
     position: relative;
     z-index: 2;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0 #f7b32b, 0 2px 6px #fff8;
+    margin-top: 18px;
 }
+
+.scoreboard span {
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 0 8px;
+}
+
+#score, #highscore {
+    color: #e94f37;
+    text-shadow: 1px 1px 0 #f7b32b, 0 0 4px #fff;
+}
+
 .restart-btn {
     display: block;
     margin: 30px auto 0 auto;
