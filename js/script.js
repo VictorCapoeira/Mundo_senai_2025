@@ -2,6 +2,7 @@ const mario = document.querySelector('.mario');
 const pipe = document.querySelector('.pipe');
 const scoreElement = document.getElementById('score');
 const highscoreElement = document.getElementById('highscore');
+const restartBtn = document.getElementById('restart-btn');
 
 let score = 0;
 let highscore = localStorage.getItem('marioHighscore') || 0;
@@ -45,9 +46,16 @@ const loop = setInterval(() => {
             localStorage.setItem('marioHighscore', highscore);
             highscoreElement.textContent = highscore;
         }
+
+        // Mostra o botão de reiniciar
+        restartBtn.style.display = 'block';
     }
 }, 10);
 
+// Reinicia o jogo ao clicar no botão
+restartBtn.addEventListener('click', () => {
+    window.location.reload();
+});
 
 
 document.addEventListener('keydown', jump);
