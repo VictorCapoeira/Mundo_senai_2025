@@ -32,6 +32,21 @@
     position: absolute;
     animation: clouds-animation 20s linear infinite;
 }
+.scoreboard {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    font-size: 1.5rem;
+    font-family: Arial, sans-serif;
+    color: #333;
+    background: rgba(255,255,255,0.7);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+}
 @keyframes pipe-animation{
     from{
         right: -80px;
