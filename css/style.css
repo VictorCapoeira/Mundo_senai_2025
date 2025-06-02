@@ -13,11 +13,21 @@
     background: linear-gradient(#87CEEB, #E0F6FF);
 }
 .pipe{
+    display: none;
     position: absolute;
     bottom: 0;
     width: 80px;
     right: -80px;
     animation: pipe-animation 1.5s infinite linear;
+}
+.bill {
+    /* display: none; */
+    position: absolute;
+    width: 100px;
+    right: -100px;
+    bottom: 70px;      /* Alinha com o Mario */
+    animation-delay: 15s;
+    animation: bill-animation 2s infinite linear;
 }
 .mario{
     width: 150px;
@@ -85,15 +95,7 @@
     transform: translateY(4px);
     box-shadow: 0 2px #3a3a3a;
 }
-.bill {
-    position: absolute;
-    width: 100px;
-    right: -120px;
-    top: 120px; /* altura maior que o Mario */
-    z-index: 3;
-    display: none;
-    animation: bill-animation 2s linear forwards;
-}
+
 
 @keyframes pipe-animation{
     from{
