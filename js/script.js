@@ -4,12 +4,16 @@ const bill = document.querySelector('.bill');
 const scoreElement = document.getElementById('score');
 const highscoreElement = document.getElementById('highscore');
 const restartBtn = document.getElementById('restart-btn');
+const bgMusic = document.getElementById('bg-music');
 
 let score = 0;
 let highscore = localStorage.getItem('marioHighscore') || 0;
 highscoreElement.textContent = highscore;
 
 let gameOver = false;
+
+// Ajusta o volume da música de fundo
+bgMusic.volume = 0.2; // Volume mais baixo
 
 // Incrementa pontos a cada 100ms enquanto o jogo não acabou
 const scoreInterval = setInterval(() => {
@@ -85,6 +89,12 @@ const loop = setInterval(() => {
 // Reinicia o jogo ao clicar no botão
 restartBtn.addEventListener('click', () => {
     window.location.reload();
+});
+
+document.addEventListener('keydown', () => {
+    if (bgMusic.paused) {
+        bgMusic.play();
+    }
 });
 
 document.addEventListener('keydown', jump);
