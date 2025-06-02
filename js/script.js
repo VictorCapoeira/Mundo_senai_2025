@@ -1,5 +1,6 @@
 const mario = document.querySelector('.mario');
 const pipe = document.querySelector('.pipe');
+const bill = document.querySelector('.bill');
 const scoreElement = document.getElementById('score');
 const highscoreElement = document.getElementById('highscore');
 const restartBtn = document.getElementById('restart-btn');
@@ -24,15 +25,40 @@ const jump = () => {
         mario.classList.remove('jump');
     }, 500);
 }
-const loop = setInterval(() => {
-    const pipePosition = pipe.offsetLeft;
-    const marioPosition = +window.getComputedStyle(mario).bottom.replace('px', '');
 
-    if (pipePosition <= 120 && pipePosition > 0 && marioPosition < 80) {
+// Função genérica para lançar objetos na tela
+function launchObject(element, animationName = '', duration = 2000) {
+    element.style.display = 'block';
+    if (animationName) {
+        element.style.animation = `${animationName} ${duration / 1000}s linear forwards`;
+        // Esconde o objeto após a animação, se desejar
+        setTimeout(() => {
+            element.style.display = 'none';
+            element.style.animation = '';
+        }, duration);
+    }
+}
+
+const loop = setInterval(() => {
+    pipe.style.display = 'block';
+
+    const pipePosition = pipe.offsetLeft;
+    const billPosition = bill.offsetLeft;
+    const marioPosition = +window.getComputedStyle(mario).bottom.replace('px', '');
+    const marioRect = mario.getBoundingClientRect();
+    
+
+    
+    if (pipePosition > 400) {
+        pipePassed = false;
+    }
+    if (pipePosition <= 120 && pipePosition > 0 && marioPosition < 80 || billPosition <= 120 && billPosition > 0 && marioPosition < 80) {
         pipe.style.animation = 'none';
         pipe.style.left = `${pipePosition}px`;
         mario.style.animation = 'none';
-        mario.style.bottom = `${marioPosition}px`;        
+        mario.style.bottom = `${marioPosition}px`;      
+        bill.style.animation = 'none';
+        bill.style.bottom = `${billPosition}px`;      
         mario.src = './mario-jump-images/game-over.png';
         mario.style.width = '75px';
         mario.style.marginLeft = '50px';
@@ -50,12 +76,15 @@ const loop = setInterval(() => {
         // Mostra o botão de reiniciar
         restartBtn.style.display = 'block';
     }
+    
+
+    
+    
 }, 10);
 
 // Reinicia o jogo ao clicar no botão
 restartBtn.addEventListener('click', () => {
     window.location.reload();
 });
-
 
 document.addEventListener('keydown', jump);
