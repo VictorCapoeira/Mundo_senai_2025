@@ -11,6 +11,7 @@ let highscore = localStorage.getItem('marioHighscore') || 0;
 highscoreElement.textContent = highscore;
 
 let gameOver = false;
+let isDucking = false;
 
 // Ajusta o volume da música de fundo
 bgMusic.volume = 0.2; // Volume mais baixo
@@ -98,3 +99,33 @@ document.addEventListener('keydown', () => {
 });
 
 document.addEventListener('keydown', jump);
+
+// Função para agachar
+function duck() {
+    if (gameOver || isDucking) return;
+    isDucking = true;
+    mario.src = 'mario-jump-images/mario-duck.png'; // ajuste o nome se necessário
+    mario.classList.remove('jump');
+    mario.style.bottom = '0'; // Vai rapidamente para o chão
+}
+
+// Função para levantar
+function standUp() {
+    if (!isDucking) return;
+    isDucking = false;
+    mario.src = 'mario-jump-images/mario.gif'; // volta para o Mario normal
+}
+
+// Evento para agachar
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') {
+        duck();
+    }
+});
+
+// Evento para levantar
+document.addEventListener('keyup', (e) => {
+    if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') {
+        standUp();
+    }
+});
