@@ -126,19 +126,15 @@ document.addEventListener('keydown', () => {
     }
 });
 
-document.addEventListener('keydown', jump);
-
-// Função para agachar
 function duck() {
     if (gameOver || isDucking) return;
     isDucking = true;
     mario.src = 'mario-jump-images/mario-duck.png'; // ajuste o nome se necessário
     mario.classList.remove('jump');
     mario.style.bottom = '0'; // Vai rapidamente para o chão
-    mario.style.width = '60px'; // Deixa menor ao agachar
+    mario.style.width = '60px'; // Proporcional ao agachar
 }
 
-// Função para levantar
 function standUp() {
     if (!isDucking) return;
     isDucking = false;
@@ -146,14 +142,15 @@ function standUp() {
     mario.style.width = '150px'; // Volta ao tamanho normal
 }
 
-// Evento para agachar
+// Controle de teclas para evitar conflito entre pulo e agachar
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') {
+    if ((e.key === 'ArrowDown' || e.key.toLowerCase() === 's') && !isDucking) {
         duck();
+    } else if ((e.key === ' ' || e.key === 'ArrowUp') && !isDucking) {
+        jump();
     }
 });
 
-// Evento para levantar
 document.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') {
         standUp();
