@@ -51,13 +51,12 @@ const loop = setInterval(() => {
     const billPosition = bill.offsetLeft;
     const marioPosition = +window.getComputedStyle(mario).bottom.replace('px', '');
     const marioRect = mario.getBoundingClientRect();
-    
+    const billRect = bill.getBoundingClientRect();
 
-    
-    if (pipePosition > 400) {
-        pipePassed = false;
-    }
-    if (pipePosition <= 120 && pipePosition > 0 && marioPosition < 80 || billPosition <= 120 && billPosition > 0 && marioPosition < 80) {
+    // Colisão com o pipe (igual antes)
+    if (
+        pipePosition <= 120 && pipePosition > 0 && marioPosition < 80
+    ) {
         pipe.style.animation = 'none';
         pipe.style.left = `${pipePosition}px`;
         mario.style.animation = 'none';
@@ -80,11 +79,40 @@ const loop = setInterval(() => {
 
         // Mostra o botão de reiniciar
         restartBtn.style.display = 'block';
+        return;
     }
-    
 
-    
-    
+    // Colisão com o Bill: só ocorre se NÃO estiver agachado
+    if (
+        !isDucking && // só colide se não estiver agachado
+        billPosition <= 120 && billPosition > 0 && marioPosition < 80
+    ) {
+        pipe.style.animation = 'none';
+        pipe.style.left = `${pipePosition}px`;
+        mario.style.animation = 'none';
+        mario.style.bottom = `${marioPosition}px`;      
+        bill.style.animation = 'none';
+        bill.style.bottom = `${billPosition}px`;      
+        mario.src = './mario-jump-images/game-over.png';
+        mario.style.width = '75px';
+        mario.style.marginLeft = '50px';
+        clearInterval(loop);
+        gameOver = true;
+        clearInterval(scoreInterval);
+
+        if (score > highscore) {
+            highscore = score;
+            localStorage.setItem('marioHighscore', highscore);
+            highscoreElement.textContent = highscore;
+        }
+
+        restartBtn.style.display = 'block';
+        return;
+    }
+
+    if (pipePosition > 400) {
+        pipePassed = false;
+    }
 }, 10);
 
 // Reinicia o jogo ao clicar no botão
@@ -107,6 +135,7 @@ function duck() {
     mario.src = 'mario-jump-images/mario-duck.png'; // ajuste o nome se necessário
     mario.classList.remove('jump');
     mario.style.bottom = '0'; // Vai rapidamente para o chão
+    mario.style.width = '60px'; // Deixa menor ao agachar
 }
 
 // Função para levantar
@@ -114,6 +143,7 @@ function standUp() {
     if (!isDucking) return;
     isDucking = false;
     mario.src = 'mario-jump-images/mario.gif'; // volta para o Mario normal
+    mario.style.width = '150px'; // Volta ao tamanho normal
 }
 
 // Evento para agachar
