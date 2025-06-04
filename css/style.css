@@ -3,12 +3,24 @@
     padding: 0;
     box-sizing: border-box;
 }
+body {
+    min-height: 100vh;
+    background: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
 .game-board {
-    width: 100%;
+    width: 90%;
     height: 500px; /* ou o valor desejado */
-    margin: 0 auto;
+    margin: 30px auto 0 auto;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 8px 32px #0002, 0 2px 8px #0001;
+    border-radius: 12px;
+    background: #6ec6f7;
+    border: 4px solid #222;
 }
 .background {
     position: absolute;
@@ -119,6 +131,109 @@
     box-shadow: 0 2px #3a3a3a;
 }
 
+/* Pódio fixo na parte de baixo */
+.podium-container {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.podium-box {
+    background: #222;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 4px 24px #0005;
+    padding: 24px 40px 18px 40px;
+    margin-bottom: 0;
+    min-width: 260px;
+    pointer-events: auto;
+}
+
+.podium-title {
+    color: #ffe066;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    font-size: 1.3rem;
+    text-align: center;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.podium {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 18px;
+}
+
+.podium-place {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    font-size: 2rem;
+    color: #fff;
+    background: #ffe066;
+    border-radius: 8px 8px 0 0;
+    width: 54px;
+    text-align: center;
+    box-shadow: 0 2px 8px #0004;
+    border: 3px solid #bfa32b;
+    position: relative;
+}
+
+.podium-place.first {
+    height: 90px;
+    color: #222;
+    background: #ffe066;
+    z-index: 2;
+}
+.podium-place.second {
+    height: 60px;
+    color: #222;
+    background: #e0c200;
+    z-index: 1;
+}
+.podium-place.third {
+    height: 40px;
+    color: #222;
+    background: #bfa32b;
+    z-index: 1;
+}
+
+#score-box {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    background: transparent;
+    border: 3px solid #a00;
+    border-radius: 18px;
+    padding: 2px 22px 2px 22px;
+    z-index: 10;
+    min-width: 60px;
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#score {
+    font-family: 'Press Start 2P', Arial, sans-serif;
+    font-size: 3rem;
+    color: #ffe066;
+    text-shadow:
+        2px 2px 0 #222,
+        0 2px 0 #bfa32b,
+        0 0 8px #fff;
+    letter-spacing: 2px;
+    font-weight: bold;
+    line-height: 1;
+}
 
 @keyframes pipe-animation{
     from{

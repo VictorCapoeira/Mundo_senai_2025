@@ -3,14 +3,10 @@ const pipe = document.querySelector('.pipe');
 const bill1 = document.querySelector('.bill1');
 const bill2 = document.querySelector('.bill2');
 const scoreElement = document.getElementById('score');
-const highscoreElement = document.getElementById('highscore');
 const restartBtn = document.getElementById('restart-btn');
 const bgMusic = document.getElementById('bg-music');
 
 let score = 0;
-let highscore = localStorage.getItem('marioHighscore') || 0;
-highscoreElement.textContent = highscore;
-
 let gameOver = false;
 let isDucking = false;
 let lastBillTime = 0;
@@ -26,7 +22,7 @@ const scoreInterval = setInterval(() => {
         scoreElement.textContent = score;
 
         // Inicia o segundo Bill quando atingir 150 pontos
-        if (score >= 120 && !bill2Started) {
+        if (score >= 150 && !bill2Started) {
             bill2Started = true;
             randomBillSpawn(bill2);
         }
@@ -93,13 +89,6 @@ const loop = setInterval(() => {
         gameOver = true;
         clearInterval(scoreInterval);
 
-        // Atualiza recorde se necessário
-        if (score > highscore) {
-            highscore = score;
-            localStorage.setItem('marioHighscore', highscore);
-            highscoreElement.textContent = highscore;
-        }
-
         // Mostra o botão de reiniciar
         restartBtn.style.display = 'block';
         return;
@@ -121,13 +110,6 @@ const loop = setInterval(() => {
         gameOver = true;
         clearInterval(scoreInterval);
 
-        // Atualiza recorde se necessário
-        if (score > highscore) {
-            highscore = score;
-            localStorage.setItem('marioHighscore', highscore);
-            highscoreElement.textContent = highscore;
-        }
-
         // Mostra o botão de reiniciar
         restartBtn.style.display = 'block';
         return;
@@ -148,13 +130,6 @@ const loop = setInterval(() => {
         clearInterval(loop);
         gameOver = true;
         clearInterval(scoreInterval);
-
-        // Atualiza recorde se necessário
-        if (score > highscore) {
-            highscore = score;
-            localStorage.setItem('marioHighscore', highscore);
-            highscoreElement.textContent = highscore;
-        }
 
         // Mostra o botão de reiniciar
         restartBtn.style.display = 'block';

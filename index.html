@@ -8,21 +8,31 @@
     <title>Mario Jump</title>
 </head>
 <body>
-    <div class="scoreboard">
-        <span>Pontos: <span id="score">0</span></span>
-        <span style="float:right;">Recorde: <span id="highscore">0</span></span>
-    </div>
+    <!-- Placar antigo removido -->
     <div class="game-board">
         <img src="mario-jump-images/background.png" class="background" >
         <img src="mario-jump-images/clouds.png" class="clouds">
         <img src="mario-jump-images/mario.gif" class="mario">
         <img src="mario-jump-images/pipe.png" class="pipe">
         <img src="mario-jump-images/bill.jpeg" class="bill bill1">
-        <img src="mario-jump-images/bill.jpeg" class="bill bill2">
+        <img src="mario-jump-images/bill.jpeg" class="bill bill2"> 
         <div class="ground"></div>
+        <div id="score-box">
+            <span id="score">0</span>
+        </div>
     </div>
     <button id="restart-btn" class="restart-btn" style="display:none;">Jogar Novamente</button>
     <audio id="bg-music" src="musica/SuperMarioBros.ThemeSong.mp3" loop autoplay></audio>
+    <div class="podium-container">
+        <div class="podium-box">
+            <div class="podium-title"><span>🏆</span> Pódio</div>
+            <div class="podium">
+                <div class="podium-place second">2</div>
+                <div class="podium-place first">1</div>
+                <div class="podium-place third">3</div>
+            </div>
+        </div>
+    </div>
     <script src="js/script.js"></script>
 </body>
 </html>
