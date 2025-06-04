@@ -33,14 +33,29 @@ const scoreInterval = setInterval(() => {
     }
 }, 100);
 
-const jump = () => {
-    if (gameOver || isDucking) return;
-    mario.classList.add('jump');
-    mario.style.bottom = '70px'; // Garante que o pulo sempre começa da grama
-    setTimeout(() => {
-        mario.classList.remove('jump');
-        mario.style.bottom = '70px'; // Volta para a grama após o pulo
-    }, 500);
+let jumpTimeout = null;
+let isJumping = false;
+
+const jump = (long = false) => {
+    if (gameOver || isDucking || isJumping) return;
+    isJumping = true;
+    mario.classList.remove('jump', 'jump-long');
+    void mario.offsetWidth; // força reflow
+    if (long) {
+        mario.classList.add('jump-long');
+        jumpTimeout = setTimeout(() => {
+            mario.classList.remove('jump-long');
+            mario.style.bottom = '70px';
+            isJumping = false;
+        }, 900);
+    } else {
+        mario.classList.add('jump');
+        jumpTimeout = setTimeout(() => {
+            mario.classList.remove('jump');
+            mario.style.bottom = '70px';
+            isJumping = false;
+        }, 500);
+    }
 }
 
 // Função genérica para lançar objetos na tela
@@ -171,17 +186,47 @@ function standUp() {
     mario.style.bottom = '70px'; // Garante que volta para a grama
 }
 
+// Controle de teclas para pulo planado
+let jumpKeyDown = false;
+let jumpLongTimeout = null;
+
 document.addEventListener('keydown', (e) => {
     if ((e.key === 'ArrowDown' || e.key.toLowerCase() === 's') && !isDucking) {
         duck();
-    } else if ((e.key === ' ' || e.key === 'ArrowUp') && !isDucking) {
-        jump();
+    } else if ((e.key === ' ' || e.key === 'ArrowUp')) {
+        if (!jumpKeyDown && !isJumping) {
+            jumpKeyDown = true;
+            jump(false); // pulo normal ao pressionar
+            // Se segurar a tecla por mais de 120ms, vira pulo longo
+            jumpLongTimeout = setTimeout(() => {
+                if (isJumping && mario.classList.contains('jump')) {
+                    mario.classList.remove('jump');
+                    mario.classList.add('jump-long');
+                    clearTimeout(jumpTimeout);
+                    jumpTimeout = setTimeout(() => {
+                        mario.classList.remove('jump-long');
+                        mario.style.bottom = '70px';
+                        isJumping = false;
+                    }, 900);
+                }
+            }, 120);
+        }
     }
 });
 
 document.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') {
         standUp();
+    } else if ((e.key === ' ' || e.key === 'ArrowUp')) {
+        jumpKeyDown = false;
+        clearTimeout(jumpLongTimeout);
+        // Se o Mario ainda estiver pulando longo, termina o pulo ao soltar a tecla
+        if (isJumping && mario.classList.contains('jump-long')) {
+            mario.classList.remove('jump-long');
+            mario.style.bottom = '70px';
+            isJumping = false;
+            if (jumpTimeout) clearTimeout(jumpTimeout);
+        }
     }
 });
 
