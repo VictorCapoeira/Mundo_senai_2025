@@ -45,8 +45,7 @@
     width: 100px;
     right: -100px;
     bottom: 140px; /* Ajuste para voar acima do Mario/ground */
-    animation-delay: 15s;
-    animation: bill-animation 3s infinite linear;
+    
 }
 .mario{
     width: 150px;

@@ -1,6 +1,7 @@
 const mario = document.querySelector('.mario');
 const pipe = document.querySelector('.pipe');
-const bill = document.querySelector('.bill');
+const bill1 = document.querySelector('.bill1');
+const bill2 = document.querySelector('.bill2');
 const scoreElement = document.getElementById('score');
 const highscoreElement = document.getElementById('highscore');
 const restartBtn = document.getElementById('restart-btn');
@@ -12,6 +13,8 @@ highscoreElement.textContent = highscore;
 
 let gameOver = false;
 let isDucking = false;
+let lastBillTime = 0;
+let bill2Started = false;
 
 // Ajusta o volume da música de fundo
 bgMusic.volume = 0.2;
@@ -21,6 +24,12 @@ const scoreInterval = setInterval(() => {
     if (!gameOver) {
         score++;
         scoreElement.textContent = score;
+
+        // Inicia o segundo Bill quando atingir 150 pontos
+        if (score >= 120 && !bill2Started) {
+            bill2Started = true;
+            randomBillSpawn(bill2);
+        }
     }
 }, 100);
 
@@ -50,10 +59,9 @@ const loop = setInterval(() => {
     pipe.style.display = 'block';
 
     const pipePosition = pipe.offsetLeft;
-    const billPosition = bill.offsetLeft;
     const marioPosition = +window.getComputedStyle(mario).bottom.replace('px', '');
-    const marioRect = mario.getBoundingClientRect();
-    const billRect = bill.getBoundingClientRect();
+    const bill1Position = bill1.offsetLeft;
+    const bill2Position = bill2.offsetLeft;
 
     // Colisão com o pipe
     if (
@@ -63,8 +71,6 @@ const loop = setInterval(() => {
         pipe.style.left = `${pipePosition}px`;
         mario.style.animation = 'none';
         mario.style.bottom = `${marioPosition}px`;
-        bill.style.animation = 'none';
-        bill.style.bottom = `${billPosition}px`;
         mario.src = './mario-jump-images/game-over.png';
         mario.style.width = '75px';
         mario.style.marginLeft = '50px';
@@ -84,31 +90,62 @@ const loop = setInterval(() => {
         return;
     }
 
-    // Colisão com o Bill: só ocorre se NÃO estiver agachado
+    // Colisão com Bill 1
     if (
-        !isDucking &&
-        billPosition <= 120 && billPosition > 0 && marioPosition < 130
+        bill1.style.display === 'block' &&
+        bill1Position <= 120 && bill1Position > 0 && marioPosition < 130 && !isDucking
     ) {
         pipe.style.animation = 'none';
         pipe.style.left = `${pipePosition}px`;
         mario.style.animation = 'none';
         mario.style.bottom = `${marioPosition}px`;
-        bill.style.animation = 'none';
-        bill.style.bottom = `${billPosition}px`;
         mario.src = './mario-jump-images/game-over.png';
         mario.style.width = '75px';
         mario.style.marginLeft = '50px';
         clearInterval(loop);
         gameOver = true;
         clearInterval(scoreInterval);
+
+        // Atualiza recorde se necessário
         if (score > highscore) {
             highscore = score;
             localStorage.setItem('marioHighscore', highscore);
             highscoreElement.textContent = highscore;
         }
+
+        // Mostra o botão de reiniciar
         restartBtn.style.display = 'block';
         return;
     }
+
+    // Colisão com Bill 2
+    if (
+        bill2.style.display === 'block' &&
+        bill2Position <= 120 && bill2Position > 0 && marioPosition < 130 && !isDucking
+    ) {
+        pipe.style.animation = 'none';
+        pipe.style.left = `${pipePosition}px`;
+        mario.style.animation = 'none';
+        mario.style.bottom = `${marioPosition}px`;
+        mario.src = './mario-jump-images/game-over.png';
+        mario.style.width = '75px';
+        mario.style.marginLeft = '50px';
+        clearInterval(loop);
+        gameOver = true;
+        clearInterval(scoreInterval);
+
+        // Atualiza recorde se necessário
+        if (score > highscore) {
+            highscore = score;
+            localStorage.setItem('marioHighscore', highscore);
+            highscoreElement.textContent = highscore;
+        }
+
+        // Mostra o botão de reiniciar
+        restartBtn.style.display = 'block';
+        return;
+    }
+
 }, 10);
 
 // Reinicia o jogo ao clicar no botão
@@ -154,3 +191,34 @@ document.addEventListener('keydown', () => {
         bgMusic.play();
     }
 });
+
+function randomBillSpawn(bill) {
+    if (gameOver) return;
+
+    // Intervalo aleatório entre 2s e 5s
+    const nextSpawn = Math.random() * 3000 + 2000;
+    const now = Date.now();
+
+    // Garante um intervalo mínimo de 500ms entre os Bills
+    if (now - lastBillTime < 500) {
+        setTimeout(() => randomBillSpawn(bill), 600);
+        return;
+    }
+    lastBillTime = now;
+
+    bill.style.display = 'block';
+    bill.style.animation = 'none';
+    // Força reflow para reiniciar a animação
+    void bill.offsetWidth;
+    bill.style.animation = 'bill-animation 2s linear forwards';
+
+    // Esconde o Bill após a animação
+    setTimeout(() => {
+        bill.style.display = 'none';
+        bill.style.animation = 'none';
+        if (!gameOver) setTimeout(() => randomBillSpawn(bill), nextSpawn);
+    }, 2000);
+}
+
+// Inicia o spam aleatório do primeiro Bill imediatamente
+randomBillSpawn(bill1);
