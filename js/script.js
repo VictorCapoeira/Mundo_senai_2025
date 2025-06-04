@@ -14,7 +14,7 @@ let gameOver = false;
 let isDucking = false;
 
 // Ajusta o volume da música de fundo
-bgMusic.volume = 0.2; // Volume mais baixo
+bgMusic.volume = 0.2;
 
 // Incrementa pontos a cada 100ms enquanto o jogo não acabou
 const scoreInterval = setInterval(() => {
@@ -25,9 +25,12 @@ const scoreInterval = setInterval(() => {
 }, 100);
 
 const jump = () => {
+    if (gameOver || isDucking) return;
     mario.classList.add('jump');
+    mario.style.bottom = '70px'; // Garante que o pulo sempre começa da grama
     setTimeout(() => {
         mario.classList.remove('jump');
+        mario.style.bottom = '70px'; // Volta para a grama após o pulo
     }, 500);
 }
 
@@ -36,7 +39,6 @@ function launchObject(element, animationName = '', duration = 2000) {
     element.style.display = 'block';
     if (animationName) {
         element.style.animation = `${animationName} ${duration / 1000}s linear forwards`;
-        // Esconde o objeto após a animação, se desejar
         setTimeout(() => {
             element.style.display = 'none';
             element.style.animation = '';
@@ -53,16 +55,16 @@ const loop = setInterval(() => {
     const marioRect = mario.getBoundingClientRect();
     const billRect = bill.getBoundingClientRect();
 
-    // Colisão com o pipe (igual antes)
+    // Colisão com o pipe
     if (
         pipePosition <= 120 && pipePosition > 0 && marioPosition < 80
     ) {
         pipe.style.animation = 'none';
         pipe.style.left = `${pipePosition}px`;
         mario.style.animation = 'none';
-        mario.style.bottom = `${marioPosition}px`;      
+        mario.style.bottom = `${marioPosition}px`;
         bill.style.animation = 'none';
-        bill.style.bottom = `${billPosition}px`;      
+        bill.style.bottom = `${billPosition}px`;
         mario.src = './mario-jump-images/game-over.png';
         mario.style.width = '75px';
         mario.style.marginLeft = '50px';
@@ -84,34 +86,28 @@ const loop = setInterval(() => {
 
     // Colisão com o Bill: só ocorre se NÃO estiver agachado
     if (
-        !isDucking && // só colide se não estiver agachado
-        billPosition <= 120 && billPosition > 0 && marioPosition < 80
+        !isDucking &&
+        billPosition <= 120 && billPosition > 0 && marioPosition < 130
     ) {
         pipe.style.animation = 'none';
         pipe.style.left = `${pipePosition}px`;
         mario.style.animation = 'none';
-        mario.style.bottom = `${marioPosition}px`;      
+        mario.style.bottom = `${marioPosition}px`;
         bill.style.animation = 'none';
-        bill.style.bottom = `${billPosition}px`;      
+        bill.style.bottom = `${billPosition}px`;
         mario.src = './mario-jump-images/game-over.png';
         mario.style.width = '75px';
         mario.style.marginLeft = '50px';
         clearInterval(loop);
         gameOver = true;
         clearInterval(scoreInterval);
-
         if (score > highscore) {
             highscore = score;
             localStorage.setItem('marioHighscore', highscore);
             highscoreElement.textContent = highscore;
         }
-
         restartBtn.style.display = 'block';
         return;
-    }
-
-    if (pipePosition > 400) {
-        pipePassed = false;
     }
 }, 10);
 
@@ -120,18 +116,13 @@ restartBtn.addEventListener('click', () => {
     window.location.reload();
 });
 
-document.addEventListener('keydown', () => {
-    if (bgMusic.paused) {
-        bgMusic.play();
-    }
-});
-
+// Controle de teclas para evitar conflito entre pulo e agachar
 function duck() {
     if (gameOver || isDucking) return;
     isDucking = true;
     mario.src = 'mario-jump-images/mario-duck.png'; // ajuste o nome se necessário
     mario.classList.remove('jump');
-    mario.style.bottom = '0'; // Vai rapidamente para o chão
+    mario.style.bottom = '70px'; // Mantém sobre a grama ao agachar
     mario.style.width = '60px'; // Proporcional ao agachar
 }
 
@@ -140,9 +131,9 @@ function standUp() {
     isDucking = false;
     mario.src = 'mario-jump-images/mario.gif'; // volta para o Mario normal
     mario.style.width = '150px'; // Volta ao tamanho normal
+    mario.style.bottom = '70px'; // Garante que volta para a grama
 }
 
-// Controle de teclas para evitar conflito entre pulo e agachar
 document.addEventListener('keydown', (e) => {
     if ((e.key === 'ArrowDown' || e.key.toLowerCase() === 's') && !isDucking) {
         duck();
@@ -154,5 +145,12 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') {
         standUp();
+    }
+});
+
+// Garante que a música toca ao pressionar qualquer tecla
+document.addEventListener('keydown', () => {
+    if (bgMusic.paused) {
+        bgMusic.play();
     }
 });

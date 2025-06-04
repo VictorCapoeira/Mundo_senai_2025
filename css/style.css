@@ -3,15 +3,12 @@
     padding: 0;
     box-sizing: border-box;
 }
-.game-board{
+.game-board {
     width: 100%;
-    height: 500px;
+    height: 500px; /* ou o valor desejado */
     margin: 0 auto;
     position: relative;
     overflow: hidden;
-    /* Remova o background antigo e a borda do chão */
-    /* background: linear-gradient(#87CEEB, #E0F6FF); */
-    /* border-bottom: 15px solid rgb(35, 160, 35); */
 }
 .background {
     position: absolute;
@@ -29,33 +26,34 @@
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 70px; /* ou a altura real da imagem */
+    height: 70px;
     z-index: 2;
     background-image: url('../mario-jump-images/ground.jpg');
     background-repeat: repeat-x;
-    background-size: auto 100%; /* Mantém a altura, repete na largura */
+    background-size: auto 100%;
 }
 .pipe{
     display: none;
     position: absolute;
-    bottom: 0;
+    bottom: 70px; /* Fica sobre o ground */
     width: 80px;
     right: -80px;
     animation: pipe-animation 1.5s infinite linear;
 }
 .bill {
-    /* display: none; */
     position: absolute;
     width: 100px;
     right: -100px;
-    bottom: 70px;      /* Alinha com o Mario */
+    bottom: 140px; /* Ajuste para voar acima do Mario/ground */
     animation-delay: 15s;
-    animation: bill-animation 2s infinite linear;
+    animation: bill-animation 3s infinite linear;
 }
 .mario{
     width: 150px;
     position: absolute;
-    bottom: 0;
+    bottom: 70px;
+    left: 60px;   /* ajuste este valor para a distância desejada da borda esquerda */
+    z-index: 3;
 }
 .jump{
     animation: jump 500ms ease-out;
@@ -128,21 +126,18 @@
         right: 100%;
     }
 }
-@keyframes jump{
-    0%{
-        bottom: 0;
+@keyframes jump {
+    0% {
+        bottom: 70px;
     }
-    40%{
-        bottom: 180px;
+    40% {
+        bottom: 200px; /* altura máxima do pulo */
     }
-    50%{
-        bottom: 180px;
+    60% {
+        bottom: 200px;
     }
-    60%{
-        bottom: 180px;
-    }
-    100%{
-        bottom: 0;
+    100% {
+        bottom: 70px;
     }
 }
 @keyframes clouds-animation{
