@@ -5,6 +5,8 @@ const bill2 = document.querySelector('.bill2');
 const scoreElement = document.getElementById('score');
 const restartBtn = document.getElementById('restart-btn');
 const bgMusic = document.getElementById('bg-music');
+const jumpSound = document.getElementById('jump-sound');
+const dieSound = document.getElementById('die-sound');
 
 let score = 0;
 let gameOver = false;
@@ -34,6 +36,8 @@ let isJumping = false;
 
 const jump = (long = false) => {
     if (gameOver || isDucking || isJumping) return;
+    jumpSound.currentTime = 0;
+    jumpSound.play();
     isJumping = true;
     mario.classList.remove('jump', 'jump-long');
     void mario.offsetWidth; // força reflow
@@ -88,7 +92,8 @@ const loop = setInterval(() => {
         clearInterval(loop);
         gameOver = true;
         clearInterval(scoreInterval);
-
+        dieSound.currentTime = 0;
+        dieSound.play();
         // Mostra o botão de reiniciar
         restartBtn.style.display = 'block';
         return;
@@ -109,7 +114,8 @@ const loop = setInterval(() => {
         clearInterval(loop);
         gameOver = true;
         clearInterval(scoreInterval);
-
+        dieSound.currentTime = 0;
+        dieSound.play();
         // Mostra o botão de reiniciar
         restartBtn.style.display = 'block';
         return;
@@ -130,7 +136,8 @@ const loop = setInterval(() => {
         clearInterval(loop);
         gameOver = true;
         clearInterval(scoreInterval);
-
+        dieSound.currentTime = 0;
+        dieSound.play();
         // Mostra o botão de reiniciar
         restartBtn.style.display = 'block';
         return;
